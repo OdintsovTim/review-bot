@@ -1,6 +1,7 @@
 -r ./base.txt
 
 mypy==0.902
+django-stubs==1.7.0
 types-PyYAML==5.4.3
 types-freezegun==0.1.4
 types-python-slugify==0.1.1
