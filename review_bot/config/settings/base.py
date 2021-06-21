@@ -27,7 +27,9 @@ class BaseConfiguration(Configuration):
         'django.contrib.admin',
     ]
     THIRD_PARTY_APPS = []
-    LOCAL_APPS = []
+    LOCAL_APPS = [
+        'review_bot.review'
+    ]
     INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
     AUTH_PASSWORD_VALIDATORS = [
