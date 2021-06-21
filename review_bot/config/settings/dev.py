@@ -1,6 +1,6 @@
 from configurations import values
 
-from .base import BaseConfiguration  # noqa: ABS101, I252
+from review_bot.config.settings.base import BaseConfiguration
 
 
 class Dev(BaseConfiguration):
