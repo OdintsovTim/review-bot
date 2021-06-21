@@ -1,2 +1,4 @@
 -r ./base.txt
 -r ./lint.txt
+
+psycopg2-binary==2.8.6
