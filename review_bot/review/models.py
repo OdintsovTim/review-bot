@@ -27,8 +27,9 @@ class Commit(models.Model):
 
 
 class Discussion(models.Model):
-    is_opened = models.BooleanField(default=True)
     author = models.ForeignKey(Developer, on_delete=models.CASCADE, related_name='discussions')
+    commit = models.ForeignKey(Commit, on_delete=models.CASCADE, related_name='discussions')
+    participants = models.ManyToManyField(Developer)
 
 
 class Comment(models.Model):
