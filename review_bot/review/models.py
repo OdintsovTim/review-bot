@@ -38,3 +38,8 @@ class Comment(models.Model):
     author = models.ForeignKey(Developer, on_delete=models.CASCADE, related_name='comments')
     commit = models.ForeignKey(Commit, on_delete=models.CASCADE, related_name='comments')
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name='comments')
+
+
+class WebhookSecretToken(models.Model):
+    secret_token = models.CharField(max_length=100)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='webhook_secret_tokens')
