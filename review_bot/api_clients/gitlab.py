@@ -7,7 +7,7 @@ from tenacity import retry, stop_after_attempt, TryAgain
 from requests import Response
 
 from review_bot.api_clients.base import BaseApiClient
-from review_bot.api_clients.custom_types import GitlabCommitData
+from review_bot.api_clients.custom_types import GitlabCommitData, GitlabWebhookData
 
 
 class GitlabApiClient(BaseApiClient):
@@ -23,6 +23,29 @@ class GitlabApiClient(BaseApiClient):
         params: dict = {'since': since, 'until': until, 'per_page': per_page}
 
         return cls._make_request(endpoint, params=params)
+
+    @classmethod
+    def add_project_webhook_with_comment_events(
+        cls,
+        project_id: int,
+        token: str,
+    ) -> Optional[GitlabWebhookData]:
+        endpoint: str = f'projects/{project_id}/hooks/'
+        body = {
+            'enable_ssl_verification': settings.USE_GITLAB_SSL_VERIFICATION,
+            'confidential_note_events': True,
+            'note_events': True,
+            'token': token,
+            'url': f'http{"s" if settings.USE_GITLAB_SSL_VERIFICATION else ""}://'
+                   f'{settings.DOMAIN}/{settings.GITLAB_WEBHOOK_URL}',
+        }
+
+        return cls._make_request(
+            endpoint,
+            method='post',
+            json_data=body,
+            skip_parsing_result=False,
+        )
 
     @classmethod
     def _make_paginated_request(

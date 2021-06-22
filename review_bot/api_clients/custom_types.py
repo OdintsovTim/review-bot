@@ -1,4 +1,4 @@
-from typing import TypedDict, Mapping
+from typing import TypedDict, Mapping, Optional
 
 
 class GitlabCommitData(TypedDict):
@@ -16,3 +16,25 @@ class GitlabCommitData(TypedDict):
     committed_date: str
     trailers: Mapping
     web_url: str
+
+
+class GitlabWebhookData(TypedDict):
+    id: int  # noqa: A003, VNE003
+    url: str
+    created_at: str
+    push_events: bool
+    tag_push_events: bool
+    merge_requests_events: bool
+    repository_update_events: bool
+    enable_ssl_verification: bool
+    project_id: int
+    issues_events: bool
+    confidential_issues_events: bool
+    note_events: bool
+    confidential_note_events: Optional[bool]
+    pipeline_events: bool
+    wiki_page_events: bool
+    deployment_events: bool
+    job_events: bool
+    releases_events: bool
+    push_events_branch_filter: Optional[str]

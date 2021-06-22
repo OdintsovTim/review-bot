@@ -6,6 +6,8 @@ from configurations import Configuration, values
 class BaseConfiguration(Configuration):
     BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
+    DOMAIN = values.Value()
+
     DEBUG = values.BooleanValue(True)
     LANGUAGE_CODE = values.Value('en-us')
     TIME_ZONE = values.Value('UTC')
@@ -82,3 +84,5 @@ class BaseConfiguration(Configuration):
     GITLAB_PRIVATE_TOKEN = values.SecretValue()
     GITLAB_API_VERSION = values.Value('v4')
     GITLAB_MAX_PAGINATOR_DEPTH = values.IntegerValue(20)
+    GITLAB_WEBHOOK_URL = values.Value('gitlab/webhook/')
+    USE_GITLAB_SSL_VERIFICATION = values.BooleanValue(False)
