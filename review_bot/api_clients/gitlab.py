@@ -58,7 +58,7 @@ class GitlabApiClient(BaseApiClient):
     )
     def _make_request(
         cls,
-        endpoint: str = None,
+        endpoint: str,
         method: str = 'get',
         json_data=None,
         params=None,
