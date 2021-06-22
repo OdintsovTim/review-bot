@@ -22,7 +22,7 @@ class GitlabApiClient(BaseApiClient):
         endpoint: str = f'projects/{project_id}/repository/commits/'
         params: dict = {'since': since, 'until': until, 'per_page': per_page}
 
-        return cls._make_request(endpoint, params=params)
+        return cls._make_paginated_request(endpoint, params=params)
 
     @classmethod
     def fetch_group_projects(cls, group_id: int) -> Optional[list[Mapping]]:
@@ -71,14 +71,14 @@ class GitlabApiClient(BaseApiClient):
         next_page = response.headers.get('X-Next-Page')
 
         for _ in range(settings.GITLAB_MAX_PAGINATOR_DEPTH):
-            if next_page is not None:
+            if next_page:
                 params['page'] = next_page
                 next_page_response = cls._make_request(endpoint, params=params)
                 if next_page_response is None:
                     return response_data
 
                 response_data += next_page_response.json()
-                next_page = response.headers.get('X-Next-Page')
+                next_page = next_page_response.headers.get('X-Next-Page')
             else:
                 break
 
