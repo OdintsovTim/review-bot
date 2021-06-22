@@ -8,6 +8,7 @@ types-python-slugify==0.1.1
 types-pytz==0.1.2
 types-requests==0.1.12
 
+pydocstyle==5.1.1
 flake8==3.8.4
 flake8-2020==1.6.0
 flake8-blind-except==0.2.0
