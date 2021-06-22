@@ -34,7 +34,7 @@ class Discussion(models.Model):
 class Comment(models.Model):
     note = models.TextField()
     created_at = models.DateTimeField()
-    line = models.IntegerField()
+    line = models.CharField(max_length=100)
     author = models.ForeignKey(Developer, on_delete=models.CASCADE, related_name='comments')
     commit = models.ForeignKey(Commit, on_delete=models.CASCADE, related_name='comments')
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name='comments')
