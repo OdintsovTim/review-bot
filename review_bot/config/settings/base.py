@@ -26,9 +26,11 @@ class BaseConfiguration(Configuration):
         'django.contrib.staticfiles',
         'django.contrib.admin',
     ]
-    THIRD_PARTY_APPS = []
+    THIRD_PARTY_APPS = [
+        'django_extensions',
+    ]
     LOCAL_APPS = [
-        'review_bot.review'
+        'review_bot.review',
     ]
     INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -76,3 +78,7 @@ class BaseConfiguration(Configuration):
             },
         },
     ]
+
+    GITLAB_PRIVATE_TOKEN = values.SecretValue()
+    GITLAB_API_VERSION = values.Value('v4')
+    GITLAB_MAX_PAGINATOR_DEPTH = values.IntegerValue(20)
