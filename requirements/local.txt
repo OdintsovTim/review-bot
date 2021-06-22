@@ -3,3 +3,10 @@
 
 psycopg2-binary==2.8.6
 ipython==7.24.1
+
+pytest==6.2.4
+pytest-sugar==0.9.4
+pytest-cov==2.12.1
+pytest_mock==3.6.1
+pytest_django==4.4.0
+responses==0.13.3
