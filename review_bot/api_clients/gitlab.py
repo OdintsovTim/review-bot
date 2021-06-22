@@ -1,5 +1,5 @@
 from json import JSONDecodeError
-from typing import Union, Optional
+from typing import Union, Optional, Mapping
 
 import requests
 from django.conf import settings
@@ -23,6 +23,16 @@ class GitlabApiClient(BaseApiClient):
         params: dict = {'since': since, 'until': until, 'per_page': per_page}
 
         return cls._make_request(endpoint, params=params)
+
+    @classmethod
+    def fetch_group_projects(cls, group_id: int) -> Optional[list[Mapping]]:
+        endpoint: str = f'groups/{group_id}/'
+
+        response = cls._make_request(endpoint, skip_parsing_result=False)
+        if not response:
+            return None
+
+        return response.get('projects')
 
     @classmethod
     def add_project_webhook_with_comment_events(
@@ -86,7 +96,7 @@ class GitlabApiClient(BaseApiClient):
         json_data=None,
         params=None,
         skip_parsing_result: bool = True,
-    ) -> Union[Response, list, None]:
+    ) -> Union[Response, list, Mapping, None]:
         url = f'https://gitlab.com/api/{settings.GITLAB_API_VERSION}/{endpoint}/'
         method_kwargs = {
             'url': url,
