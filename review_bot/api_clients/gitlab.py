@@ -42,7 +42,7 @@ class GitlabApiClient(BaseApiClient):
                 params['page'] = next_page
                 next_page_response = cls._make_request(endpoint, params=params)
                 if next_page_response is None:
-                    continue
+                    return response_data
 
                 response_data += next_page_response.json()
                 next_page = response.headers.get('X-Next-Page')
