@@ -71,16 +71,16 @@ class GitlabApiClient(BaseApiClient):
         next_page = response.headers.get('X-Next-Page')
 
         for _ in range(settings.GITLAB_MAX_PAGINATOR_DEPTH):
-            if next_page:
-                params['page'] = next_page
-                next_page_response = cls._make_request(endpoint, params=params)
-                if next_page_response is None:
-                    return response_data
-
-                response_data += next_page_response.json()
-                next_page = next_page_response.headers.get('X-Next-Page')
-            else:
+            if not next_page:
                 break
+
+            params['page'] = next_page
+            next_page_response = cls._make_request(endpoint, params=params)
+            if next_page_response is None:
+                return response_data
+
+            response_data += next_page_response.json()
+            next_page = next_page_response.headers.get('X-Next-Page')
 
         return response_data
 
