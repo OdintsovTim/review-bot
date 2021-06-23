@@ -85,4 +85,7 @@ class BaseConfiguration(Configuration):
     GITLAB_API_VERSION = values.Value('v4')
     GITLAB_MAX_PAGINATOR_DEPTH = values.IntegerValue(20)
     GITLAB_WEBHOOK_URL = values.Value('gitlab/webhook/')
+    GITLAB_GROUP_ID = values.IntegerValue()
     USE_GITLAB_SSL_VERIFICATION = values.BooleanValue(False)
+
+    REVIEW_TIMEZONE = values.Value('Europe/Moscow')
