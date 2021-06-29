@@ -7,6 +7,9 @@ class Project(models.Model):
     default_branch = models.CharField(max_length=100)
     web_url = models.SlugField(max_length=150)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Developer(models.Model):
     gitlab_id = models.PositiveIntegerField()
@@ -14,6 +17,9 @@ class Developer(models.Model):
     name = models.CharField(max_length=50)
     username = models.CharField(max_length=50)
     slack_id = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Commit(models.Model):
