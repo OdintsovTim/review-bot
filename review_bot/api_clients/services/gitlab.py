@@ -39,7 +39,7 @@ class GitlabService:
         return new_projects_ids
 
     @staticmethod
-    def _fetch_commits_for_the_last_day(project_id: int) -> Optional[list[GitlabCommitData]]:
+    def _fetch_commits_for_the_last_day(project_id: int) -> list[GitlabCommitData]:
         local_today = datetime.now(tz=pytz.timezone(settings.REVIEW_TIMEZONE))
         local_yesterday = local_today - timedelta(days=1)
         start_time_utc = local_yesterday.replace(hour=0, minute=0, second=0, microsecond=0).astimezone(timezone.utc)
@@ -108,14 +108,13 @@ class GitlabService:
 
         for project_id in project_ids:
             commits = self._fetch_commits_for_the_last_day(project_id)
-            if commits is None:
-                continue
 
             self._save_commits_to_db(commits, project_id)
 
     def synchronize_all_data(self):
         self.synchronize_projects()
         self.synchronize_developers()
+        self.synchronize_commits_for_the_last_day()
 
     def _fetch_group_projects(self) -> Optional[list[Mapping]]:
         return GitlabApiClient.fetch_group_projects(self.group_id)

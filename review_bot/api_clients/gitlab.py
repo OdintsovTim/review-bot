@@ -20,7 +20,7 @@ class GitlabApiClient(BaseApiClient):
         since: str = None,
         until: str = None,
         per_page: int = 100,
-    ) -> Optional[list[GitlabCommitData]]:
+    ) -> list[GitlabCommitData]:
         endpoint: str = f'projects/{project_id}/repository/commits/'
         params: dict = {'since': since, 'until': until, 'per_page': per_page}
 
