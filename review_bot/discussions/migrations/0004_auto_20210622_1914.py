@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('review', '0003_webhooksecrettoken'),
+        ('discussions', '0003_webhooksecrettoken'),
     ]
 
     operations = [
@@ -18,12 +18,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='discussion',
             name='commit',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='discussions', to='review.commit'),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='discussions', to='discussions.commit'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='discussion',
             name='participants',
-            field=models.ManyToManyField(to='review.Developer'),
+            field=models.ManyToManyField(to='discussions.Developer'),
         ),
     ]

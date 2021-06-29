@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_opened', models.BooleanField(default=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='discussions', to='review.developer')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='discussions', to='discussions.developer')),
             ],
         ),
         migrations.CreateModel(
@@ -49,8 +49,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField()),
                 ('title', models.CharField(max_length=200)),
                 ('web_url', models.SlugField(max_length=200)),
-                ('developer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commits', to='review.developer')),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commits', to='review.project')),
+                ('developer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commits', to='discussions.developer')),
+                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commits', to='discussions.project')),
             ],
         ),
         migrations.CreateModel(
@@ -60,9 +60,9 @@ class Migration(migrations.Migration):
                 ('note', models.TextField()),
                 ('created_at', models.DateTimeField()),
                 ('line', models.IntegerField()),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='review.developer')),
-                ('commit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='review.commit')),
-                ('discussion', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='review.discussion')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='discussions.developer')),
+                ('commit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='discussions.commit')),
+                ('discussion', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='discussions.discussion')),
             ],
         ),
     ]

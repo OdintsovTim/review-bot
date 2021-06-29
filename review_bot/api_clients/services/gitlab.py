@@ -7,7 +7,7 @@ from django.conf import settings
 
 from review_bot.api_clients.custom_types import GitlabCommitData
 from review_bot.api_clients.gitlab import GitlabApiClient
-from review_bot.review.models import Project, Commit, Developer
+from review_bot.discussions.models import Project, Commit, Developer
 
 
 class GitlabService:

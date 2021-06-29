@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from review_bot.review.models import Developer, Discussion, Project, Commit, Comment, WebhookSecretToken
+from review_bot.discussions.models import Developer, Discussion, Project, Commit, Comment, WebhookSecretToken
 
 
 admin.site.register(Developer)

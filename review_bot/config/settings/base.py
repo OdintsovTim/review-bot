@@ -32,7 +32,7 @@ class BaseConfiguration(Configuration):
         'django_extensions',
     ]
     LOCAL_APPS = [
-        'review_bot.review',
+        'review_bot.discussions',
     ]
     INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

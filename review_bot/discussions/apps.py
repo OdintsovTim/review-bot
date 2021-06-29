@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ListingConfig(AppConfig):
-    name = 'review_bot.review'
+    name = 'review_bot.discussions'

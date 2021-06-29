@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('review', '0002_alter_comment_line'),
+        ('discussions', '0002_alter_comment_line'),
     ]
 
     operations = [
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('secret_token', models.CharField(max_length=100)),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='webhook_secret_tokens', to='review.project')),
+                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='webhook_secret_tokens', to='discussions.project')),
             ],
         ),
     ]
