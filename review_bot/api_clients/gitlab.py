@@ -32,7 +32,7 @@ class GitlabApiClient(BaseApiClient):
         if not response:
             return None
 
-        return response.get('projects')
+        return [project for project in response.get('projects') if not project['archived']]
 
     @classmethod
     def add_project_webhook_with_comment_events(
