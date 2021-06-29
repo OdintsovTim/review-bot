@@ -7,7 +7,9 @@ from tenacity import retry, stop_after_attempt, TryAgain
 from requests import Response
 
 from review_bot.api_clients.base import BaseApiClient
-from review_bot.api_clients.custom_types import GitlabCommitData, GitlabWebhookData
+from review_bot.api_clients.custom_types import (
+    GitlabCommitData, GitlabWebhookData, GitlabUserData,
+)
 
 
 class GitlabApiClient(BaseApiClient):
@@ -23,6 +25,26 @@ class GitlabApiClient(BaseApiClient):
         params: dict = {'since': since, 'until': until, 'per_page': per_page}
 
         return cls._make_paginated_request(endpoint, params=params)
+
+    @classmethod
+    def fetch_project_developers(cls, project_id: int) -> list[GitlabUserData]:
+        endpoint: str = f'projects/{project_id}/members/all/'
+
+        developers_without_emails = cls._make_paginated_request(endpoint)
+
+        developers = []
+        for developer_without_email in developers_without_emails:
+            developer = cls.fetch_developer_with_email(developer_without_email['id'])
+            if developer is not None:
+                developers.append(developer)
+
+        return developers
+
+    @classmethod
+    def fetch_developer_with_email(cls, user_id: int) -> Optional[GitlabUserData]:
+        endpoint: str = f'users/{user_id}/'
+
+        return cls._make_request(endpoint, skip_parsing_result=False)
 
     @classmethod
     def fetch_group_projects(cls, group_id: int) -> Optional[list[Mapping]]:
@@ -62,12 +84,13 @@ class GitlabApiClient(BaseApiClient):
         cls,
         endpoint: str = None,
         params=None,
-    ) -> Optional[list]:
+    ) -> list:
+        response_data: list = []
         response = cls._make_request(endpoint, params=params)
         if response is None:
-            return None
+            return response_data
 
-        response_data = response.json()
+        response_data += response.json()
         next_page = response.headers.get('X-Next-Page')
 
         for _ in range(settings.GITLAB_MAX_PAGINATOR_DEPTH):
@@ -77,7 +100,7 @@ class GitlabApiClient(BaseApiClient):
             params['page'] = next_page
             next_page_response = cls._make_request(endpoint, params=params)
             if next_page_response is None:
-                return response_data
+                break
 
             response_data += next_page_response.json()
             next_page = next_page_response.headers.get('X-Next-Page')

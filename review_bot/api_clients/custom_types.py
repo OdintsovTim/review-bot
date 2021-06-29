@@ -38,3 +38,27 @@ class GitlabWebhookData(TypedDict):
     job_events: bool
     releases_events: bool
     push_events_branch_filter: Optional[str]
+
+
+class GitlabUserData(TypedDict):
+    id: int  # noqa: A003, VNE003
+    name: str
+    username: str
+    state: str
+    avatar_url: str
+    created_at: str
+    bio: str
+    bio_html: str
+    location: str
+    public_email: str
+    skype: str
+    linkedin: str
+    twitter: str
+    website_url: str
+    organization: str
+    job_title: str
+    pronouns: Optional[str]
+    bot: bool
+    work_information: Optional[str]
+    followers: str
+    following: str
