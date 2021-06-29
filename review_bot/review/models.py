@@ -12,10 +12,8 @@ class Project(models.Model):
 
 
 class Developer(models.Model):
-    gitlab_id = models.PositiveIntegerField()
     email = models.EmailField(blank=True, null=True)
     name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50)
     slack_id = models.PositiveIntegerField(null=True)
 
     def __str__(self):

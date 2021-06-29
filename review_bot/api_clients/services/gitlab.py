@@ -5,7 +5,7 @@ from typing import Optional, Mapping
 import pytz
 from django.conf import settings
 
-from review_bot.api_clients.custom_types import GitlabCommitData, GitlabUserData
+from review_bot.api_clients.custom_types import GitlabCommitData
 from review_bot.api_clients.gitlab import GitlabApiClient
 from review_bot.review.models import Project, Commit, Developer
 
@@ -53,7 +53,10 @@ class GitlabService:
     def _save_commits_to_db(commits: list[GitlabCommitData], project_id: int) -> None:
         for commit in commits:
             project: Project = Project.objects.get(project_id=project_id)
-            developer: Developer = Developer.objects.get(email=commit['committer_email'])
+            developer, _ = Developer.objects.get_or_create(
+                email=commit['committer_email'],
+                name=commit['committer_name'],
+            )
 
             Commit.objects.get_or_create(
                 commit_id=commit['id'],
@@ -67,28 +70,6 @@ class GitlabService:
                 },
             )
 
-    @staticmethod
-    def _save_developers_to_db(developers: list[GitlabUserData]):
-        for developer in developers:
-            Developer.objects.get_or_create(
-                gitlab_id=developer['id'],
-                defaults={
-                    'email': developer['public_email'],
-                    'name': developer['name'],
-                    'username': developer['username'],
-                },
-            )
-
-    @staticmethod
-    def _fetch_developers() -> list[GitlabUserData]:
-        project_ids = Project.objects.values_list('project_id', flat=True)
-
-        developers = []
-        for project_id in project_ids:
-            developers += GitlabApiClient.fetch_project_developers(project_id)
-
-        return developers
-
     def synchronize_projects(self) -> None:
         projects: Optional[list[Mapping]] = self._fetch_group_projects()
         if projects is None:
@@ -97,11 +78,6 @@ class GitlabService:
         new_projects_ids = self._save_group_projects_to_db(projects)
         for new_project_id in new_projects_ids:
             self._add_project_webhook_with_comment_events(new_project_id)
-
-    def synchronize_developers(self):
-        developers: list[GitlabUserData] = self._fetch_developers()
-
-        self._save_developers_to_db(developers)
 
     def synchronize_commits_for_the_last_day(self) -> None:
         project_ids = Project.objects.values_list('project_id', flat=True)
@@ -113,7 +89,6 @@ class GitlabService:
 
     def synchronize_all_data(self):
         self.synchronize_projects()
-        self.synchronize_developers()
         self.synchronize_commits_for_the_last_day()
 
     def _fetch_group_projects(self) -> Optional[list[Mapping]]:

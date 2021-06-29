@@ -7,9 +7,7 @@ from tenacity import retry, stop_after_attempt, TryAgain
 from requests import Response
 
 from review_bot.api_clients.base import BaseApiClient
-from review_bot.api_clients.custom_types import (
-    GitlabCommitData, GitlabWebhookData, GitlabUserData,
-)
+from review_bot.api_clients.custom_types import GitlabCommitData, GitlabWebhookData
 
 
 class GitlabApiClient(BaseApiClient):
@@ -25,26 +23,6 @@ class GitlabApiClient(BaseApiClient):
         params: dict = {'since': since, 'until': until, 'per_page': per_page}
 
         return cls._make_paginated_request(endpoint, params=params)
-
-    @classmethod
-    def fetch_project_developers(cls, project_id: int) -> list[GitlabUserData]:
-        endpoint: str = f'projects/{project_id}/members/all/'
-
-        developers_without_emails = cls._make_paginated_request(endpoint)
-
-        developers = []
-        for developer_without_email in developers_without_emails:
-            developer = cls.fetch_developer_with_email(developer_without_email['id'])
-            if developer is not None:
-                developers.append(developer)
-
-        return developers
-
-    @classmethod
-    def fetch_developer_with_email(cls, user_id: int) -> Optional[GitlabUserData]:
-        endpoint: str = f'users/{user_id}/'
-
-        return cls._make_request(endpoint, skip_parsing_result=False)
 
     @classmethod
     def fetch_group_projects(cls, group_id: int) -> Optional[list[Mapping]]:
