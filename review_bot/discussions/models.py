@@ -22,7 +22,7 @@ class Developer(models.Model):
 
 class Commit(models.Model):
     commit_id = models.CharField(max_length=50)
-    short_id = models.CharField(max_length=10)
+    short_id = models.CharField(max_length=10, null=True)
     created_at = models.DateTimeField()
     title = models.CharField(max_length=200)
     web_url = models.SlugField(max_length=200)
@@ -31,15 +31,16 @@ class Commit(models.Model):
 
 
 class Discussion(models.Model):
+    discussion_id = models.PositiveIntegerField()
     author = models.ForeignKey(Developer, on_delete=models.CASCADE, related_name='discussions')
     commit = models.ForeignKey(Commit, on_delete=models.CASCADE, related_name='discussions')
-    participants = models.ManyToManyField(Developer)
+    participants = models.ManyToManyField(Developer, blank=True)
 
 
 class Comment(models.Model):
+    comment_id = models.PositiveIntegerField()
     note = models.TextField()
     created_at = models.DateTimeField()
-    line = models.CharField(max_length=100)
     author = models.ForeignKey(Developer, on_delete=models.CASCADE, related_name='comments')
     commit = models.ForeignKey(Commit, on_delete=models.CASCADE, related_name='comments')
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name='comments')
