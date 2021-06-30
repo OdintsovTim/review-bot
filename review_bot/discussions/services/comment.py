@@ -132,14 +132,16 @@ class GitlabCommentService:
         developer: Developer,
         commit: Commit,
     ) -> None:
-
-        Comment.objects.get_or_create(
-            comment_id=json_comment_data['object_attributes']['id'],
-            defaults={
-                'note': json_comment_data['object_attributes']['note'],
-                'created_at': json_comment_data['object_attributes']['created_at'],
-                'author': developer,
-                'commit': commit,
-                'discussion': discussion,
-            },
-        )
+        try:
+            Comment.objects.get_or_create(
+                comment_id=json_comment_data['object_attributes']['id'],
+                defaults={
+                    'note': json_comment_data['object_attributes']['note'],
+                    'created_at': json_comment_data['object_attributes']['created_at'],
+                    'author': developer,
+                    'commit': commit,
+                    'discussion': discussion,
+                },
+            )
+        except KeyError:
+            raise WebhookDataError("Request data doesn't contain info about comment")
